@@ -24,6 +24,23 @@ app.get('/api/hello', function (req, res) {
   res.json({ greeting: 'hello API' });
 });
 
+app.use((req, res, next) => {
+  req.ipaddress = req.ip; // Express automatically parses the IP address from the request
+  next();
+});
+
+// Middleware to extract preferred language from request headers
+app.use((req, res, next) => {
+  req.language = req.headers['accept-language']; // Extract the preferred language from the Accept-Language header
+  next();
+});
+
+// Middleware to extract software information from request headers
+app.use((req, res, next) => {
+  req.software = req.headers['user-agent']; // Extract the software information from the User-Agent header
+  next();
+});
+
 app.get("/api/whoami", function (req, res) {
   res.json({
     ipaddress: req.ipaddress,
